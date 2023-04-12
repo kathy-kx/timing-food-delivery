@@ -14,6 +14,12 @@ spring:
   web:
     resources:
       static-locations: classpath:/backend/, classpath:/front/
+#在项目的application.yml中加入redis相关配置
+  redis:
+    host: localhost # 本地ip或者虚拟机IP。此处使用了本地的
+    port: 6379
+    password:
+    database: 0 # 默认使用0号数据库
 
 mybatis-plus:
   configuration:
@@ -27,3 +33,4 @@ mybatis-plus:
 #文件上传时，上传到指定位置
 timing_food_delivery:
   path: /Users/kxzhu/Downloads/img_upload/
+
