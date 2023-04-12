@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--新增菜品页面/修改菜品-->
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="../../styles/page.css" />
+  <style>
+    .selectInput {
+      position: relative;
+      width: 100%;
+      min-width: 100px;
+    }
+    .selectInput .flavorSelect {
+      position: absolute;
+      width: 100%;
+      padding: 0 10px;
+      border-radius: 3px;
+      border: solid 1px #FF903D;
+      line-height: 30px;
+      text-align: center;
+      background: #fff;
+      top: 50px;
+      z-index: 99;
+    }
+    .selectInput .flavorSelect .items {
+      cursor: pointer;
+      display: inline-block;
+      width: 100%;
+      line-height: 35px;
+      border-bottom: solid 1px #f4f4f4;
+      color: #666;
+    }
+    .selectInput .flavorSelect .none {
+      font-size: 14px;
+    }
+
+    #food-add-app .uploadImg .el-form-item__label::before{
+          content: '*';
+          color: #F56C6C;
+          margin-right: 4px;
+      }
+
+  </style>
+</head>
+<body>
+   <div class="addBrand-container" id="food-add-app">
+    <div class="container">
+      <el-form
+        ref="ruleForm"
+        :model="ruleForm"
+        :rules="rules"
+        :inline="true"
+        label-width="180px"
+        class="demo-ruleForm"
+      >
+        <div>
+          <el-form-item
+            label="菜品名称:"
+            prop="name"
+          >
+            <el-input
+              v-model="ruleForm.name"
+              placeholder="请填写菜品名称"
+              maxlength="20"
+            />
+          </el-form-item>
+          <el-form-item
+            label="菜品分类:"
+            prop="categoryId"
+          >
+            <el-select
+              v-model="ruleForm.categoryId"
+              placeholder="请选择菜品分类"
+            >
+              <el-option v-for="(item,index) in dishList" :key="index" :label="item.name" :value="item.id" />
+            </el-select>
+          </el-form-item>
+        </div>
+        <div>
+          <el-form-item
+            label="菜品价格:"
+            prop="price"
+          >
+            <el-input
+              v-model="ruleForm.price"
+              placeholder="请设置菜品价格"
+            />
+          </el-form-item>
+        </div>
+        <el-form-item label="口味做法配置:">
+          <el-form-item>
+            <div class="flavorBox">
+              <span
+                v-if="dishFlavors.length == 0"
+                class="addBut"
+                @click="addFlavor"
+              > + 添加口味</span>
+              <div
+                v-if="dishFlavors.length != 0"
+                class="flavor"
+              >
+                <div class="title">
+                  <span>口味名（3个字内）</span><span>口味标签（输入标签回车添加）</span>
+                </div>
+                <div class="cont">
+                  <div
+                    v-for="(item, index) in dishFlavors"
+                    :key="index"
+                    class="items"
+                  >
+                    <div class="itTit">
+                      <!-- <SelectInput
+                        :dish-flavors-data="dishFlavorsData"
+                        :index="index"
+                        :value="item.name"
+                        @select="selectHandle"
+                      /> -->
+                      <div class="selectInput">
+                        <div>
+                           <el-input
+                              v-model="item.name"
+                              type="text"
+                              style="width: 100%"
+                              placeholder="请输入口味"
+                              @focus="selectFlavor(true,index)"
+                              @blur="outSelect(false,index)"
+                              @input="inputHandle(index)"
+                            />
+                        </div>
+                        <div v-show="item.showOption" class="flavorSelect">
+                          <span
+                            v-for="(it, ind) in dishFlavorsData"
+                            :key="ind"
+                            class="items"
+                            @click="checkOption(it,ind,index)"
+                          >{{ it.name }}</span>
+                          <span
+                            v-if="dishFlavorsData == []"
+                            class="none"
+                          >无数据</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="labItems"
+                      style="display: flex"
+                    >
+                      <span
+                        v-for="(it, ind) in item.value"
+                        :key="ind"
+                      >{{ it }} <i @click="delFlavorLabel(index, ind)">X</i></span>
+                      <div
+                        class="inputBox"
+                        :style="inputStyle"
+                        contenteditable="true"
+                        @focus="flavorPosition(index)"
+                        @keydown.enter="(val)=>keyDownHandle(val,index)"
+                      ></div>
+                    </div>
+                    <span
+                      class="delFlavor delBut non"
+                      @click="delFlavor(index)"
+                    >删除</span>
+                  </div>
+                </div>
+                <div
+                  class="addBut"
+                  @click="addFlavor"
+                >
+                  添加口味
+                </div>
+              </div>
+            </div>
+          </el-form-item>
+        </el-form-item>
+        <div>
+        </div>
+        <div>
+          <el-form-item
+            label="菜品图片:"
+            prop="region"
+            class="uploadImg"
+          >
+            <el-upload
+              class="avatar-uploader"
+              action="/common/upload"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :on-change="onChange"
+              ref="upload"
+            >
+              <img
+                v-if="imageUrl"
+                :src="imageUrl"
+                class="avatar"
+              ></img>
+              <i
+                v-else
+                class="el-icon-plus avatar-uploader-icon"
+              ></i>
+            </el-upload>
+          </el-form-item>
+        </div>
+        <div class="address">
+          <el-form-item
+            label="菜品描述:"
+            prop="region"
+          >
+            <el-input
+              v-model="ruleForm.description"
+              type="textarea"
+              :rows="3"
+              placeholder="菜品描述，最长200字"
+              maxlength="200"
+            />
+          </el-form-item>
+        </div>
+        <div class="subBox address">
+          <el-form-item>
+            <el-button @click="goBack()">
+              取消
+            </el-button>
+            <el-button
+              type="primary"
+              @click="submitForm('ruleForm')"
+            >
+              保存
+            </el-button><!--点保存后，执行submitForm('ruleForm')方法，-->
+            <el-button
+              v-if="actionType == 'add'"
+              type="primary"
+              class="continue"
+              @click="submitForm('ruleForm','goAnd')"
+            >
+              保存并继续添加菜品
+            </el-button><!--"保存并继续添加菜品"按钮 仅在添加菜品时显示，在修改菜品时不显示-->
+          </el-form-item>
+        </div>
+      </el-form>
+    </div>
+  </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="../../plugins/vue/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="../../plugins/element-ui/index.js"></script>
+    <!-- 引入axios -->
+    <script src="../../plugins/axios/axios.min.js"></script>
+    <script src="../../js/request.js"></script>
+    <script src="../../js/validate.js"></script>
+    <script src="../../js/index.js"></script>
+    <script src="../../api/food.js"></script>
+    <script>
+      new Vue({
+        el: '#food-add-app',
+        data() {
+          return {
+            id: '',
+            restKey: 0,
+            textarea: '',
+            value: '',
+            imageUrl: '',
+            actionType: '',
+            dishList: [],
+            dishFlavorsData: [],
+            dishFlavors: [],
+            vueRest : '1',
+            index : 0,
+            inputStyle  : {'flex':1},
+            ruleForm  : {
+              'name': '',
+              'id': '',
+              'price': '',
+              'code': '',
+              'image': '',
+              'description': '',
+              'dishFlavors': [],
+              'status': true,
+              categoryId: ''
+            },
+            mak: false
+          }
+        },
+        computed: {
+          rules () {
+            return {
+              'name': [
+                {'required': true, 'message': '请填写菜品名称', 'trigger': 'blur'}
+              ],
+              'categoryId': [
+                {'required': true, 'message': '请选择菜品分类', 'trigger': 'change'}
+              ],
+              'price': [
+                {
+                  'required': true,
+                  // 'message': '请填写菜品价格',
+                  validator: (rules, value, callback) => {
+                    if (!value) {
+                      callback(new Error('请填写菜品价格'))
+                    } else {
+                      const reg = /^\d+(\.\d{0,2})?$/
+                      if (reg.test(value)) {
+                        if(value < 10000){
+                          callback()
+                        }else{
+                          callback(new Error('菜品价格小于10000'))
+                        }
+                      } else {
+                        callback(new Error('菜品价格格式只能为数字,且最多保留两位小数'))
+                      }
+                    }
+                  },
+                  'trigger': 'blur'
+                }
+              ],
+            }
+          }
+        },
+        created() { //钩子函数。vue对象创建完之后，就会调用此方法
+          this.getDishList() //获取所有的菜品分类，给/category/list发送ajax请求，method为get，携带参数params——type=1
+          // 口味临时数据
+          this.getFlavorListHand()
+          this.id = requestUrlParam('id')//取出url中参数id的值
+          this.actionType = this.id ? 'edit' : 'add'//如果url中有id值，则actionType为'edit'修改，否则就是'add'添加
+          if (this.id) {//如果url中有id值（修改的请求），则执行init()方法
+            this.init()
+          }
+        },
+        mounted() {
+        },
+        methods: {
+          async init () {
+            queryDishById(this.id).then(res => {//如果url中有id值（修改的请求），执行此方法。执行queryDishById(id)方法，向/dish/${id}发送get请求，需要服务器处理，查询该菜品信息
+              console.log(res)
+              if (String(res.code) === '1') {
+                this.ruleForm = { ...res.data }
+                this.ruleForm.price = String(res.data.price/100)//需要服务器响应回来 该id的菜品的 价格、售卖状态、图片、菜品口味 等数据
+                this.ruleForm.status = res.data.status == '1'
+                this.dishFlavors = res.data.flavors && res.data.flavors.map(obj => ({ ...obj, value: JSON.parse(obj.value),showOption: false }))
+                console.log('this.dishFlavors',this.dishFlavors)
+                // this.ruleForm.id = res.data.data.categoryId
+                // this.imageUrl = res.data.data.image
+                this.imageUrl = `/common/download?name=${res.data.image}`
+              } else {
+                this.$message.error(res.msg || '操作失败')
+              }
+            })
+          },
+          // 按钮 - 添加口味
+          addFlavor () {
+            this.dishFlavors.push({'name': '', 'value': [], showOption: false}) // JSON.parse(JSON.stringify(this.dishFlavorsData))
+          },
+
+          // 按钮 - 删除口味
+          delFlavor (ind) {
+            this.dishFlavors.splice(ind, 1)
+          },
+
+          // 按钮 - 删除口味标签
+          delFlavorLabel (index, ind) {
+            this.dishFlavors[index].value.splice(ind, 1)
+          },
+
+          //口味位置记录
+          flavorPosition (index) {
+            this.index = index
+          },
+
+          // 添加口味标签
+          keyDownHandle (val,index) {
+            console.log('keyDownHandle----val',val)
+            console.log('keyDownHandle----index',index)
+            console.log('keyDownHandle----this.dishFlavors',this.dishFlavors)
+            if (event) {
+              event.cancelBubble = true
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            if (val.target.innerText.trim() != '') {
+              this.dishFlavors[index].value.push(val.target.innerText)
+              val.target.innerText = ''
+            }
+          },
+
+          // 获取菜品分类
+          /*
+          向/category/list发ajax请求，请求类型是Get，params是type=1
+          向/category/list?type=1发送请求，服务器处理后返回响应R(也是res)
+          如果执行成功，把响应回的data（从数据库查询出的所有菜品分类-list）赋给dishList属性，dishList即页面上的菜品分类下拉框
+           */
+          getDishList () {
+            getCategoryList({ 'type': 1 }).then(res => {
+              if (res.code === 1) {
+                this.dishList = res.data
+              } else {
+                this.$message.error(res.msg || '操作失败')
+              }
+            })
+          },
+
+          // 获取口味列表
+          getFlavorListHand () {
+            // flavor flavorData
+            this.dishFlavorsData = [
+              {'name':'甜味','value':['无糖','少糖','半糖','多糖','全糖']},
+              {'name':'温度','value':['热饮','常温','去冰','少冰','多冰']},
+              {'name':'忌口','value':['不要葱','不要蒜','不要香菜','不要辣']},
+              {'name':'辣度','value':['不辣','微辣','中辣','重辣']}
+            ]
+          },
+
+          selectFlavor(st,index){
+            console.log('st',st)
+            console.log('index',index)
+            console.log('this.dishFlavors',this.dishFlavors)
+            const obj = JSON.parse(JSON.stringify(this.dishFlavors[index]))
+            obj.showOption = st
+            this.dishFlavors.splice(index,1,obj)
+            // this.dishFlavors[index].showOption = st
+          },
+
+          outSelect(st,index){
+            const _this = this
+            setTimeout(()=> {
+              const obj = JSON.parse(JSON.stringify(_this.dishFlavors[index]))
+              obj.showOption = st
+              _this.dishFlavors.splice(index,1,obj)
+            }, 200)
+          },
+
+          inputHandle(val,index){
+            // this.selectFlavor(false,index)
+          },
+
+          checkOption(val, ind, index){
+            this.selectHandle(val.name, index, ind)
+            this.dishFlavors[index].name = val.name
+          },
+
+          selectHandle(val, key, ind){
+            const arrDate = [...this.dishFlavors]
+            arrDate[key] = JSON.parse(JSON.stringify(this.dishFlavorsData[ind]))
+            this.dishFlavors = arrDate
+          },
+
+          submitForm(formName, st) {
+            this.$refs[formName].validate((valid) => {//先做校验
+              if (valid) { //如果校验通过
+                let params = {...this.ruleForm}//把整个表单的数据收集起来，封装到params
+                // params.flavors = this.dishFlavors
+                params.status = this.ruleForm ? 1 : 0 // 1起售，0停售
+                params.price *= 100 //将数据中的元转换为分
+                params.categoryId = this.ruleForm.categoryId
+                params.flavors = this.dishFlavors.map(obj => ({ ...obj, value: JSON.stringify(obj.value) }))
+                delete params.dishFlavors
+                if(!this.imageUrl){
+                  this.$message.error('请上传菜品图片')
+                  return 
+                }
+                if (this.actionType == 'add') { //当前为"添加"
+                  delete params.id
+                  addDish(params).then(res => {//addDish()方法，发送请求给/dish，method为post，附带表单数据params。
+                    // 所以控制器方法应该能够接收提交的表单中的这些数据params，并保存到数据表
+                    //返回的R类型只要String即可
+                    if (res.code === 1) {
+                      this.$message.success('菜品添加成功！')
+                      if (!st) {
+                        this.goBack()
+                      } else {
+                        this.dishFlavors = []
+                        // this.dishFlavorsData = []
+                        this.imageUrl = ''
+                        this.ruleForm = {
+                          'name': '',
+                          'id': '',
+                          'price': '',
+                          'code': '',
+                          'image': '',
+                          'description': '',
+                          'dishFlavors': [],
+                          'status': true,
+                          categoryId: ''
+                        }
+                      }
+                    } else {
+                      this.$message.error(res.msg || '操作失败')
+                    }
+                  }).catch(err => {
+                    this.$message.error('请求出错了：' + err)
+                  })
+                } else { //当前为"修改"
+                  delete params.updateTime
+                  editDish(params).then(res => {//向/dish发送ajax请求，请求方式为put，携带params参数
+                    if (res.code === 1) {
+                      this.$message.success('菜品修改成功！')
+                      this.goBack()//向/backend/page/food/list.html发送请求，显示菜品分页信息
+                    } else {
+                      this.$message.error(res.msg || '操作失败')
+                    }
+                  }).catch(err => {
+                    this.$message.error('请求出错了：' + err)
+                  })
+                }
+              } else {
+                return false
+              }
+            })
+          },
+
+          handleAvatarSuccess (response, file, fileList) {
+            // 拼接down接口预览
+            if(response.code === 0 && response.msg === '未登录'){
+              window.top.location.href = '/backend/page/login/login.html'
+            }else{
+              this.imageUrl = `/common/download?name=${response.data}`
+              this.ruleForm.image = response.data
+            }
+          },
+
+          onChange (file) {
+            if(file){
+              const suffix = file.name.split('.')[1]
+              const size = file.size / 1024 / 1024 < 2
+              if(['png','jpeg','jpg'].indexOf(suffix) < 0){
+                this.$message.error('上传图片只支持 png、jpeg、jpg 格式！')
+                this.$refs.upload.clearFiles()
+                return false
+              }
+              if(!size){
+                this.$message.error('上传文件大小不能超过 2MB!')
+                return false
+              }
+              return file
+            }
+          },
+          
+          goBack(){
+            window.parent.menuHandle({
+              id: '4',
+              url: '/backend/page/food/list.html',
+              name: '菜品管理'
+            },false)
+          }
+        }
+      })
+    </script>
+</body>
+</html>

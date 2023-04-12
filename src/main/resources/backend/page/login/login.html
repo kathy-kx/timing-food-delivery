@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>有时外卖管理后台</title>
+  <link rel="shortcut icon" href="../../favicon.ico">
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+  <link rel="stylesheet" href="../../styles/common.css">
+  <link rel="stylesheet" href="../../styles/login.css">
+  <link rel="stylesheet" href="../../styles/icon/iconfont.css" />
+  <style>
+    .body{
+      min-width: 1366px;
+    }
+  </style>
+</head> 
+
+<body>
+  <div class="login" id="login-app">
+    <div class="login-box">
+      <img src="../../images/login/login-l.png" alt="">
+      <div class="login-form">
+        <el-form ref="loginForm" :model="loginForm" :rules="loginRules" >
+          <div class="login-form-title">
+            <img src="../../images/login/logo.png" style="width:139px;height:42px;" alt="" />
+          </div>
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号" maxlength="20"
+              prefix-icon="iconfont icon-user" />
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="loginForm.password" type="password" placeholder="密码" prefix-icon="iconfont icon-lock" maxlength="20"
+              @keyup.enter.native="handleLogin" />
+          </el-form-item>
+          <el-form-item style="width:100%;">
+            <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
+              @click.native.prevent="handleLogin">  <!--点击"登录按钮"时，执行methods方法（下面）-->
+              <span v-if="!loading">登录</span>
+              <span v-else>登录中...</span>
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+  <script src="../../plugins/vue/vue.js"></script>
+  <!-- 引入组件库 -->
+  <script src="../../plugins/element-ui/index.js"></script>
+  <!-- 引入axios -->
+  <script src="../../plugins/axios/axios.min.js"></script>
+  <script src="../../js/request.js"></script>
+  <script src="../../js/validate.js"></script>
+  <script src="../../api/login.js"></script>
+
+  <script>
+    new Vue({
+      el: '#login-app',
+      data() {
+        return {
+          loginForm:{
+            username: 'admin',
+            password: '123456'
+          },
+          loading: false
+        }
+      },
+      computed: {
+        loginRules() {
+          const validateUsername = (rule, value, callback) => {
+            if (value.length < 1 ) {
+              callback(new Error('请输入用户名'))
+            } else {
+              callback()
+            }
+          }
+          const validatePassword = (rule, value, callback) => {
+            if (value.length < 6) {
+              callback(new Error('密码必须在6位以上'))
+            } else {
+              callback()
+            }
+          }
+          return {
+            'username': [{ 'validator': validateUsername, 'trigger': 'blur' }],
+            'password': [{ 'validator': validatePassword, 'trigger': 'blur' }]
+          }
+        }
+      },
+      created() {
+      },
+      methods: {
+        async handleLogin() {
+          // 点击"登录"按钮时，执行methods方法。
+          this.$refs.loginForm.validate(async (valid) => {
+            // validate校验用户名和密码。
+            // 如果登录通过，loading改为true。显示"登录中"。并发送请求给/employee/login，并跳转到首页
+            // 否则（登录失败）loading为false，显示"登录"
+            // 注：服务端给页面响应回来的数据应该含有code, data, msg，且是json形式
+            if (valid) {
+              this.loading = true
+              let res = await loginApi(this.loginForm)  //  loginApi向/employee/login发送post请求,并且带上loginForm数据。res是controller响应回来的结果
+              if (String(res.code) === '1') {   // 约定：1表示登录成功
+                localStorage.setItem('userInfo',JSON.stringify(res.data)) //将请求表单中的data（Employee员工实体）数据转为json字符串，作为值；将'userInfo'作为键，保存在浏览器中(可以在检查-application处查看)
+                window.location.href= '/backend/index.html' //跳转到/backend/index.html首页
+              } else {
+                this.$message.error(res.msg)
+                this.loading = false
+              }
+            }
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

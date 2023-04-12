@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    #应用的名称，非必须项。如果不配置，默认使用工程名
+    name: timing_food_delivery
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/food_delivery_system?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: 4rfv$RFV
+  web:
+    resources:
+      static-locations: classpath:/backend/, classpath:/front/
+
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true # 开启后，表名address_book可以映射为实体类名AddressBook；字段名user_name可以映射为属性名userName
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID    # 主键的生成策略
+
+#文件上传时，上传到指定位置
+timing_food_delivery:
+  path: /Users/kxzhu/Downloads/img_upload/

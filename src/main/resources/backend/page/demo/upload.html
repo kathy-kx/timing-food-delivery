@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文件上传</title>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="../../styles/page.css" />
+</head>
+<body>
+   <div class="addBrand-container" id="food-add-app">
+    <div class="container">
+        <!--
+        前端过程：
+            （上传：）
+            el-upload是elementUI提供的【上传组件】
+            指定action="/common/upload"，所以选择图片上传后，会发POST请求到/common/upload，由控制器处理。（控制器处理后，会响应filename文件名回来）
+            （下载：）
+            :on-success="handleAvatarSuccess"：文件上传success后，接到服务器的响应 R.success(filename)，
+              同时回调handleAvatarSuccess方法，发送下载请求/common/download?name=${response.data}。其中response.data是服务器刚响应回来的R对象中封装的filename
+            接下来由img标签展示 下载下来的图片，来源是imageUrl，它是请求/common/download?name=${response.data}由服务器处理后的结果（即通过输出流，响应到浏览器的图片）由img标签展示
+        -->
+        <el-upload class="avatar-uploader"
+                action="/common/upload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeUpload"
+                ref="upload">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar"></img>
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+    </div>
+  </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="../../plugins/vue/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="../../plugins/element-ui/index.js"></script>
+    <!-- 引入axios -->
+    <script src="../../plugins/axios/axios.min.js"></script>
+    <script src="../../js/index.js"></script>
+    <script>
+      new Vue({
+        el: '#food-add-app',
+        data() {
+          return {
+            imageUrl: ''
+          }
+        },
+        methods: {
+          //文件上传完成后，回调handleAvatarSuccess方法
+          //即上传完成后，紧接着发送/common/download请求，并将name传过去给服务器。name是上传完后服务器响应回来的，即return R.success(fileName)
+          handleAvatarSuccess (response, file, fileList) {
+              this.imageUrl = `/common/download?name=${response.data}` //response.data可以拿到返回的文件名称。会向/common/download?name=xxx发送请求，需要在controller中响应这个请求
+          },//文件下载
+          beforeUpload (file) {
+            if(file){
+              const suffix = file.name.split('.')[1]
+              const size = file.size / 1024 / 1024 < 2
+              if(['png','jpeg','jpg'].indexOf(suffix) < 0){
+                this.$message.error('上传图片只支持 png、jpeg、jpg 格式！')
+                this.$refs.upload.clearFiles()
+                return false
+              }
+              if(!size){
+                this.$message.error('上传文件大小不能超过 2MB!')
+                return false
+              }
+              return file
+            }
+          }
+        }
+      })
+    </script>
+</body>
+</html>
