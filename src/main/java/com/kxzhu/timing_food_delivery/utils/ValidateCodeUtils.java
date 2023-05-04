@@ -12,7 +12,7 @@ public class ValidateCodeUtils {
      * @return
      */
     public static Integer generateValidateCode(int length){
-        Integer code =null;
+        Integer code = null;
         if(length == 4){
             code = new Random().nextInt(9999);//生成随机数，最大为9999
             if(code < 1000){

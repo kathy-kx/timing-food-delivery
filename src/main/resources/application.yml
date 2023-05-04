@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    #应用的名称，非必须项。如果不配置，默认使用工程名
+    #应用的名称，非必需项。如果不配置，默认使用工程名
     name: timing_food_delivery
   datasource:
     druid:

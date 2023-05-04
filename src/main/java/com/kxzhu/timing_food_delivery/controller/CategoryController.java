@@ -105,7 +105,7 @@ public class CategoryController {
      * @param category
      * @return
      */
-    @PutMapping("")
+    @PutMapping
     public R<String> update(@RequestBody Category category){
         //参数：前端发来json形式的请求参数({"id":"1397844263642378242","name":"湘菜2","sort":1})，用@RequestBody注解，接收请求体中的参数
         //且json形式的请求参数都是实体类Category的属性，可以封装到实体类

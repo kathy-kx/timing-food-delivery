@@ -38,7 +38,7 @@
           </el-form-item>
           <el-form-item style="width:100%;">
             <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
-              @click.native.prevent="handleLogin">  <!--点击"登录按钮"时，执行methods方法（下面）-->
+              @click.native.prevent="handleLogin">  <!--点击"登录按钮"时，执行methods中的handleLogin方法（下面）-->
               <span v-if="!loading">登录</span>
               <span v-else>登录中...</span>
             </el-button>
@@ -98,7 +98,7 @@
         async handleLogin() {
           // 点击"登录"按钮时，执行methods方法。
           this.$refs.loginForm.validate(async (valid) => {
-            // validate校验用户名和密码。
+            // validate校验用户名和密码是否为空。
             // 如果登录通过，loading改为true。显示"登录中"。并发送请求给/employee/login，并跳转到首页
             // 否则（登录失败）loading为false，显示"登录"
             // 注：服务端给页面响应回来的数据应该含有code, data, msg，且是json形式
@@ -106,7 +106,7 @@
               this.loading = true
               let res = await loginApi(this.loginForm)  //  loginApi向/employee/login发送post请求,并且带上loginForm数据。res是controller响应回来的结果
               if (String(res.code) === '1') {   // 约定：1表示登录成功
-                localStorage.setItem('userInfo',JSON.stringify(res.data)) //将请求表单中的data（Employee员工实体）数据转为json字符串，作为值；将'userInfo'作为键，保存在浏览器中(可以在检查-application处查看)
+                localStorage.setItem('userInfo',JSON.stringify(res.data)) //将响应回来的data（Employee员工实体）数据转为json字符串，作为值；将'userInfo'作为键，保存在浏览器中(可以在检查-application处查看)
                 window.location.href= '/backend/index.html' //跳转到/backend/index.html首页
               } else {
                 this.$message.error(res.msg)

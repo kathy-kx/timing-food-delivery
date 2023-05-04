@@ -31,8 +31,9 @@ public class EmployeeController {
 
     /**
      * 员工登录功能
+     * 处理请求：/employee/login，method=post
      * @param employee 登录时，浏览器发送post请求给服务器，其中带着员工登录信息，封装到Employee对象中。
-     *                 服务器可以通过在形参使用@RequestBody获取json格式的请求参数。
+     *                 服务器可通过在形参使用@RequestBody获取json格式的请求参数。
      * @param request 便于获取session，将employee对象的id存一份到session，表示登录成功，便于获取登录用户？？
      * @return
      */

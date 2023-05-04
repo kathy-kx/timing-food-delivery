@@ -78,6 +78,5 @@ const dishStatusByStatus = (params) => {
     url: `/dish/status/${params.status}`,
     method: 'post',
     params: { ids: params.id }
-  //   原本是 params: { ids: params.id } ，我改为params: { id: params.id }
   })
 }

@@ -8,6 +8,7 @@ import com.kxzhu.timing_food_delivery.dto.SetmealDto;
 import com.kxzhu.timing_food_delivery.entity.Category;
 import com.kxzhu.timing_food_delivery.entity.Dish;
 import com.kxzhu.timing_food_delivery.entity.Setmeal;
+import com.kxzhu.timing_food_delivery.entity.SetmealDish;
 import com.kxzhu.timing_food_delivery.service.CategoryService;
 import com.kxzhu.timing_food_delivery.service.SetmealDishService;
 import com.kxzhu.timing_food_delivery.service.SetmealService;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -134,12 +136,21 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    @Transactional
     public R<String> delete(String[] ids){
         int count = 0; //计数：ids中有多少个启售的套餐
         for(String id : ids){
             Setmeal setmeal = setmealService.getById(id);
             if(setmeal.getStatus() == 0){//停售(status=0)的套餐
-                setmealService.removeById(id); //删除选中的停售套餐
+                //删除setmeal表中的停售套餐
+                setmealService.removeById(id);
+
+                //同时还要删除setmeal_dish表中 该套餐对应的信息（这一段老师未写，自己改的）
+                // select * from setmeal_dish where setmeal_id = ?
+                LambdaQueryWrapper<SetmealDish> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(SetmealDish::getSetmealId, id);
+                setmealDishService.remove(queryWrapper);
+
             } else { //启售(status=1)的套餐
                 count ++; //启售的套餐数量加1
             }
@@ -147,7 +158,7 @@ public class SetmealController {
         if(count > 0 && count == ids.length){//全是启售的
             return R.error("选中的套餐均为'启售'状态，不可删除");
         }else {//如果有至少1个套餐是停售的，删除了选中的停售套餐
-            return R.success("套餐删除成功");
+            return R.success("'停售'的套餐删除成功");
         }
     }
 

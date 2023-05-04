@@ -23,6 +23,8 @@ import java.util.List;
 public class WebMvcConfig extends WebMvcConfigurationSupport {
     /**
      * 设置静态资源映射
+     * springboot默认情况下只能访问static或者templates下的静态资源。
+     * 现在我们想将静态资源放在resources下并能访问，需要在配置类中设置MVC框架静态资源映射。
      * @param registry
      */
     @Override
