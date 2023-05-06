@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +58,7 @@ public class SetmealController {
      *
      */
     @PostMapping
+    @CacheEvict(value = "setmealCache", allEntries = true) //allEntries = true，删除setmealCache这一类的所有缓存数据
     public R<String> save(@RequestBody SetmealDto setmealDto){
         log.info("套餐信息: {}",setmealDto);
         setmealService.saveWithDish(setmealDto);
@@ -137,6 +140,7 @@ public class SetmealController {
      */
     @DeleteMapping
     @Transactional
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> delete(String[] ids){
         int count = 0; //计数：ids中有多少个启售的套餐
         for(String id : ids){
@@ -169,6 +173,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping("/status/{status}")
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> switchStatus(@PathVariable Integer status, String[] ids){
         for (String id : ids){
             Setmeal setmeal = setmealService.getById(id);
@@ -200,6 +205,7 @@ public class SetmealController {
      * @return
      */
     @PutMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> update(@RequestBody SetmealDto setmealDto){
         //log.info("setmealDto: {}", setmealDto);
         setmealService.updateWithDish(setmealDto);
@@ -214,6 +220,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("list")
+    @Cacheable(value = "setmealCache", key = "#setmeal.categoryId + '_' + #setmeal.status") //根据查询条件，拼接出key
     public R<List<Setmeal>> list(Setmeal setmeal){
         //从setmeal表中查该分类id对应的套餐数据
         //select * from setmeal where category_id = ? and status = ?

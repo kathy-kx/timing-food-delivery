@@ -20,6 +20,9 @@ spring:
     port: 6379
     password:
     database: 0 # 默认使用0号数据库
+  cache:
+    redis:
+      time-to-live: 1800000  # 设置缓存有效期。非必需，如果没设置就是永久有效
 
 mybatis-plus:
   configuration:
