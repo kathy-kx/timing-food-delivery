@@ -26,11 +26,11 @@ The 'Timing Food Delivery' project is inspired by the Reggie Takeout from Bilibi
     - 查询订单
     - 派送订单
 
-![管理员登录](1.png)
+![管理员登录](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/1.png)
 
-![菜品管理](2.png)
+![菜品管理](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/2.png)
 
-![订单管理](3.png)
+![订单管理](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/3.png)
 
 ### 1.2 前台功能
 
@@ -49,7 +49,7 @@ The 'Timing Food Delivery' project is inspired by the Reggie Takeout from Bilibi
     - 查看订单状态
     - 再来一单
 
-![前台功能](4.png)
+![前台功能](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/4.png)
 
 ### 1.3 技术栈
 
