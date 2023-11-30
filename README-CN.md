@@ -97,7 +97,7 @@ spring:
 
 主数据源和从数据源的url、username和password
 
-1. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：![主从复制实现方法笔记]([https://kathy-kx.github.io/2023/11/18/瑞吉外卖优化02-主从复制-Nginx/](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%88%86%E7%A6%BB-Nginx/))
+1. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：[主从复制实现方法笔记]([https://kathy-kx.github.io/2023/11/18/瑞吉外卖优化02-主从复制-Nginx/](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%88%86%E7%A6%BB-Nginx/))
 2. 配置主库和从库。具体步骤参考笔记1.1.3&1.1.4节：![主从复制实现读写分离方法笔记]([https://kathy-kx.github.io/2023/11/18/瑞吉外卖优化02-主从复制-Nginx/](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%88%86%E7%A6%BB-Nginx/))
 3. 打开redis数据库
 4. 访问方法**待更新**
