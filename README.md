@@ -97,7 +97,7 @@ spring:
 主数据源和从数据源的url、username和password
 
 1. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：[主从复制实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
-2. 配置主库和从库。具体步骤参考笔记1.1.3 & 1.1.4节：[主从复制实现读写分离方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
+2. 配置主库和从库。具体步骤参考笔记1.1.3 & 1.1.4节：[主从复制读写分离实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
 3. 打开redis数据库
 4. 访问方法**待更新**
 
@@ -117,7 +117,7 @@ spring:
 
 ### 笔记
 
-我也将详细的笔记、步骤等梳理在个人博客中，可以参考：[github Blog外卖项目笔记](https://kathy-kx.github.io/categories/Food-Delivery-System/)
+我也将详细的笔记、步骤等梳理在个人博客中，可以参考：[外卖项目笔记合集](https://kathy-kx.github.io/categories/Food-Delivery-System/)
 
 ### SQL文件
 
