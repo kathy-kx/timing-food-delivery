@@ -62,7 +62,8 @@
 
 ### **v1.0版本**
 
-1. 下载代码。
+1. 下载[v1.0分支](https://github.com/kathy-kx/timing-food-delivery/tree/v1.0)的代码。
+
 2. 修改`src/main/resources/application.yml`文件中的数据库信息
 
 需要改动：
@@ -79,27 +80,40 @@ spring:
 
 以及文件上传路径
 
-1. 如在本地运行，在IntelliJ IDEA中运行项目。
+3. 启动本地Redis服务。如未安装和配置，步骤可参考：[Mac安装Redis](https://blog.csdn.net/realize_dream/article/details/106227622)
+
+启动redis服务：
+
+方式一：`redis-server`
+
+方式二：启动服务并显式加载配置文件（推荐，将redis.conf配置文件中的daemonize no修改成yes后，可以后台运行redis）
+    `/opt/homebrew/opt/redis/bin/redis-server /opt/homebrew/etc/redis.conf`
+
+连接redis服务： `redis-cli -h 127.0.0.1 -p 6379`
+
+4. 在本地运行项目。
 
 后台访问地址：[localhost:8080/backend/page/login.html](http://localhost:8080/backend/page/login.html)
 
 前台访问地址：[localhost:8080/front/page/login.html](http://localhost:8080/front/page/login.html)
 
-如需在服务器上部署，先将项目打成`jar`包，运行`java -jar packageName`
-
 ### **v1.1版本**
 
-1. 下载代码。
+1. 下载main分支代码。
+
 2. 修改`src/main/resources/application.yml`文件中的数据库信息
 
 需要修改：
 
 主数据源和从数据源的url、username和password
 
-1. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：[主从复制实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
-2. 配置主库和从库。具体步骤参考笔记1.1.3 & 1.1.4节：[主从复制读写分离实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
-3. 打开redis数据库
-4. 访问方法**待更新**
+3. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：[主从复制实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
+
+4. 配置主库和从库。具体步骤参考笔记1.1.3 & 1.1.4节：[主从复制读写分离实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
+
+5. 打开redis数据库
+
+6. 访问方法**待更新**
 
 ## 3. 版本简介
 
