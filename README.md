@@ -124,7 +124,7 @@ timing_food_delivery:
    
 2. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：[主从复制实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
 
-3. 配置主库和从库。具体步骤参考笔记1.1.3&1.1.4节：[主从复制实现读写分离方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%88%86%E7%A6%BB-Nginx/)
+3. 配置主库和从库。具体步骤参考笔记1.1.3&1.1.4节：[主从复制实现读写分离方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
 
 4. 修改`src/main/resources/application.yml`文件中的数据库信息
 
