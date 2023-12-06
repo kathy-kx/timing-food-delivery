@@ -78,7 +78,7 @@
 
 ### **v1.0版本**
 
-1. 下载[v1.0](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.0)的代码。
+1. 下载[v1.0版本](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.0)的代码。
 
 2. 修改`src/main/resources/application.yml`文件中的数据库信息
 
@@ -120,7 +120,7 @@ timing_food_delivery:
 
 ### **v1.1版本**
 
-1. 下载main分支代码
+1. 下载[v1.1版本](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.1)代码
    
 2. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：[主从复制实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
 
