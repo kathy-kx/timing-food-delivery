@@ -78,7 +78,7 @@
 
 ### **v1.0版本**
 
-1. 下载[v1.0分支](https://github.com/kathy-kx/timing-food-delivery/tree/v1.0)的代码。
+1. 下载[v1.0](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.0)的代码。
 
 2. 修改`src/main/resources/application.yml`文件中的数据库信息
 
@@ -206,3 +206,7 @@ timing_food_delivery:
 ### SQL文件
 
 [sql文件](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/food_delivery_system.sql)
+
+### 菜品图片资源
+
+[菜品图片](https://github.com/kathy-kx/timing-food-delivery/tree/main/resources/%E5%9B%BE%E7%89%87%E8%B5%84%E6%BA%90)
