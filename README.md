@@ -1,212 +1,200 @@
-# timing-food-delivery
-有时外卖项目源自B站黑马程序员的瑞吉外卖，由Spring Boot + Mybatis Plus构建，提供用户点餐、餐厅管理、订单处理等功能。有时外卖在原课程基础上，增加了完整的注释，补充了课堂未实现的功能，希望帮助大家学习。
+# Timing Food Delivery Project
 
-## 1. 项目预览
+The Timing Food Delivery project is inspired by the "Regi Takeout" tutorial from Bilibili. It is built using **Spring Boot** and **MyBatis Plus** and provides features such as user ordering, restaurant management, and order processing. 
+This project includes comprehensive comments and additional functionalities that were not implemented in the original tutorial to help learners better understand the system.
 
-### 1.1 后台功能
+## 1. Project Overview
 
-后台模块是为餐厅提供的综合管理平台。包含的功能有：
+### 1.1 Admin Features
 
-- 管理员登录
-- 员工管理
-    - 添加员工
-    - 编辑员工信息
-    - 禁用/启用员工
-- 分类管理
-    - 新增菜品/套餐分类
-    - 编辑/删除分类
-- 菜品管理
-    - 新增、修改菜品信息
-    - 删除、启售、停售菜品（支持批量操作）
-- 套餐管理
-    - 新增、修改套餐信息
-    - 删除、启售、停售套餐（支持批量操作）
-- 订单管理
-    - 查询订单
-    - 派送订单
+The backend module is a comprehensive management platform designed for restaurant administrators. The main features include:
 
-![管理员登录](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/1.png)
+- Admin Login
+- Employee Management
+  - Add new employees
+  - Edit employee information
+  - Enable/disable employees
+- Category Management
+  - Add dish/set meal categories
+  - Edit/delete categories
+- Dish Management
+  - Add or update dish information
+  - Delete, enable, or disable dishes (supports batch operations)
+- Set Meal Management
+  - Add or update set meal information
+  - Delete, enable, or disable set meals (supports batch operations)
+- Order Management
+  - View orders
+  - Dispatch orders
 
-![菜品管理](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/2.png)
+Admin Login Interface:
+![Admin Login](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/1.png)
 
-![订单管理](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/3.png)
+Dish Management Interface:
+![Dish Management](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/2.png)
 
-### 1.2 前台功能
+Order Management Interface:
+![Order Management](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/3.png)
 
-前台是为用户提供的移动端应用。包含的功能有：
+---
 
-- 用户登录注册
-- 地址管理
-    - 新增、修改、删除地址
-    - 设为默认地址
-- 将菜品加入购物车
-    - 选择规格（忌口、辣度、甜度、温度）
-    - 增减数量
-    - 删除菜品
-- 下订单与结算
-- 订单管理
-    - 查看订单状态
-    - 再来一单
+### 1.2 User Features
 
-![前台功能](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/4.png)
+The frontend is a mobile application for users. The key features include:
 
-### 1.3 技术栈
+- **User Registration and Login**
+- **Address Management**
+  - Add, edit, and delete addresses
+  - Set default address
+- **Shopping Cart**
+  - Select specifications (e.g., preferences for spiciness, sweetness, or temperature)
+  - Increase or decrease dish quantity
+  - Remove dishes
+- **Order Placement and Checkout**
+- **Order Management**
+  - View order status
+  - Repeat a previous order
 
-- SpringBoot
-- MyBatis Plus
-- MySQL
-- SSM
-- Redis
+**User Interface:**
+![Frontend Features](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/4.png)
 
+---
 
-## 2. 版本简介
+### **1.3 Technology Stack**
 
-### v1.0版本
+- Spring Boot  
+- MyBatis Plus  
+- MySQL  
+- SSM (Spring + SpringMVC + MyBatis)  
+- Redis  
 
-实现基本功能。见1.1节和1.2节。
+---
 
-使用Redis缓冲验证码（有效期设置为5分钟）、菜品数据。
+## **2. Version Details**
 
-### v1.1版本
+### **Version v1.0**  
 
-实现主从复制、读写分离
+The initial version includes the basic functionalities outlined in sections **1.1** and **1.2**.
 
-主库负责处理事务性的增删改操作，从库负责处理查询操作。使得整个系统的查询性能得到极大的改善。
+Key highlights:
 
+- Use **Redis** to cache verification codes (valid for 5 minutes) and dish data.
 
-## 3. 项目部署
+---
 
-### **v1.0版本**
+### **Version v1.1**  
 
-1. 下载[v1.0版本](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.0)的代码。
+This version introduces **master-slave replication** and **read-write separation**.
 
-2. 修改`src/main/resources/application.yml`文件中的数据库信息
+- The **master database** handles transactional operations (insert, update, delete).
+- The **slave database** handles query operations.
 
-需要改动：
+This greatly improves the system's query performance.
 
-```yaml
-spring:
-  datasource:
-    druid:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/food_delivery_system?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${username}
-      password: ${password}
-```
+---
 
-以及文件上传路径
+## **3. Project Deployment**
 
-```yaml
-timing_food_delivery:
-  path: 
-```
+### **v1.0 Deployment Steps**
 
-3. 启动本地Redis服务。如未安装和配置，步骤可参考：[Mac安装Redis](https://blog.csdn.net/realize_dream/article/details/106227622)
+1. Download the [v1.0 version](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.0) from GitHub.
 
-启动redis服务：
+2. Modify the **`application.yml`** file in **`src/main/resources/`** to configure your database connection.
 
-方式一：`redis-server`
+   Example:
 
-方式二：启动服务并显式加载配置文件（推荐，将redis.conf配置文件中的daemonize no修改成yes后，可以后台运行redis）
-    `/opt/homebrew/opt/redis/bin/redis-server /opt/homebrew/etc/redis.conf`
+   ```yaml
+   spring:
+     datasource:
+       druid:
+         driver-class-name: com.mysql.cj.jdbc.Driver
+         url: jdbc:mysql://localhost:3306/food_delivery_system?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+         username: ${username}
+         password: ${password}
+   ```
 
-连接redis服务： `redis-cli -h 127.0.0.1 -p 6379`
+   Also update the file upload path:
 
-4. 在本地运行项目。
+   ```yaml
+   timing_food_delivery:
+     path: 
+   ```
 
-后台访问地址：[localhost:8080/backend/page/login.html](http://localhost:8080/backend/page/login.html)
+3. Start your **local Redis service**. If you haven’t installed Redis yet, follow the instructions here: [Installing Redis on Mac](https://blog.csdn.net/realize_dream/article/details/106227622).
 
-前台访问地址：[localhost:8080/front/page/login.html](http://localhost:8080/front/page/login.html)
+   **Start Redis service:**
 
-### **v1.1版本**
+   - Option 1:  
+     ```bash
+     redis-server
+     ```
 
-1. 下载[v1.1版本](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.1)代码
-   
-2. 提前准备好两台服务器，分别安装MySQL并启动服务，并连接navicat。具体步骤参考笔记1.1.2节：[主从复制实现方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
+   - Option 2 (recommended):  
+     ```bash
+     /opt/homebrew/opt/redis/bin/redis-server /opt/homebrew/etc/redis.conf
+     ```
 
-3. 配置主库和从库。具体步骤参考笔记1.1.3&1.1.4节：[主从复制实现读写分离方法笔记](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/)
+     Ensure **`daemonize`** is set to **`yes`** in the Redis config file to run the service in the background.
 
-4. 修改`src/main/resources/application.yml`文件中的数据库信息
+   **Connect to Redis:**
+   ```bash
+   redis-cli -h 127.0.0.1 -p 6379
+   ```
 
-需要修改：
+4. Run the project locally.
 
-主数据源和从数据源的url(分别改为主库和从库的ip)、username和password
+   - **Admin Interface:** [http://localhost:8080/backend/page/login.html](http://localhost:8080/backend/page/login.html)  
+   - **User Interface:** [http://localhost:8080/front/page/login.html](http://localhost:8080/front/page/login.html)
 
-```yaml
-spring:
-#sharding jdbc框架 配置读写分离规则
-  shardingsphere:
-    datasource:
-      names:
-        master,slave # 名字自定即可。需要在master-data-source-name、slave-data-source-names中对应上
-      # 主数据源
-      master:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.50.158:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-        username: ${username}
-        password: ${password}
-      # 从数据源
-      slave:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.50.99:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-        username: ${username}
-        password: ${password}
-    masterslave:
-      # 读写分离配置
-      load-balance-algorithm-type: round_robin # 从库负载均衡策略：轮询
-      # 最终的数据源名称
-      name: dataSource
-      # 主库数据源名称
-      master-data-source-name: master
-      # 从库数据源名称列表，多个逗号分隔
-      slave-data-source-names: slave
-    props:
-      sql:
-        show: true # 开启SQL显示，默认false。可以在控制台输出sql
-  # 允许bean定义覆盖
-  main:
-    allow-bean-definition-overriding: true
-```
+---
 
-以及文件上传路径
+### **v1.1 Deployment Steps**
 
-```yaml
-timing_food_delivery:
-  path: 
-```
+1. Download the [v1.1 version](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.1) from GitHub.
 
-5. 启动本地Redis服务。
+2. Prepare **two servers** with MySQL installed and running. Connect them with Navicat. For detailed steps, refer to the notes in section **1.1.2**: [Master-Slave Replication Guide](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/).
 
-如未安装和配置，步骤可参考：[Mac安装Redis](https://blog.csdn.net/realize_dream/article/details/106227622)
+3. Configure **master-slave replication**. Detailed steps are in sections **1.1.3** and **1.1.4**: [Read-Write Separation Guide](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/).
 
-启动redis服务：
+4. Modify the **`application.yml`** file to configure the **master** and **slave** databases.
 
-方式一：`redis-server`
+   Example:
 
-方式二：启动服务并显式加载配置文件（推荐，将redis.conf配置文件中的daemonize no修改成yes后，可以后台运行redis）
-`/opt/homebrew/opt/redis/bin/redis-server /opt/homebrew/etc/redis.conf`
+   ```yaml
+   spring:
+     shardingsphere:
+       datasource:
+         names: master,slave
+         master:
+           type: com.alibaba.druid.pool.DruidDataSource
+           driver-class-name: com.mysql.cj.jdbc.Driver
+           url: jdbc:mysql://192.168.50.158:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+           username: ${username}
+           password: ${password}
+         slave:
+           type: com.alibaba.druid.pool.DruidDataSource
+           driver-class-name: com.mysql.cj.jdbc.Driver
+           url: jdbc:mysql://192.168.50.99:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+           username: ${username}
+           password: ${password}
+   ```
 
-连接redis服务： `redis-cli -h 127.0.0.1 -p 6379`
+5. Start the **local Redis service** (refer to step 3 in v1.0 deployment).
 
-6. 访问
+6. Access the project:
 
-后台访问地址：[localhost:8080/backend/page/login.html](http://localhost:8080/backend/page/login.html)
+   - **Admin Interface:** [http://localhost:8080/backend/page/login.html](http://localhost:8080/backend/page/login.html)  
+   - **User Interface:** [http://localhost:8080/front/page/login.html](http://localhost:8080/front/page/login.html)
 
-前台访问地址：[localhost:8080/front/page/login.html](http://localhost:8080/front/page/login.html)
+---
 
+## **4. Resources**
 
-## 4. 相关资料
+### **Notes**  
+I’ve compiled detailed notes and guides on my personal blog: [Food Delivery System Notes](https://kathy-kx.github.io/categories/Food-Delivery-System/).
 
-### 笔记
+### **SQL Files**  
+[SQL Script](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/food_delivery_system.sql)
 
-我也将详细的笔记、步骤等梳理在个人博客中，可以参考：[外卖项目笔记合集](https://kathy-kx.github.io/categories/Food-Delivery-System/)
-
-### SQL文件
-
-[sql文件](https://github.com/kathy-kx/timing-food-delivery/blob/main/resources/food_delivery_system.sql)
-
-### 菜品图片资源
-
-[菜品图片](https://github.com/kathy-kx/timing-food-delivery/tree/main/resources/%E5%9B%BE%E7%89%87%E8%B5%84%E6%BA%90)
+### **Dish Images**  
+[Dish Image Resources](https://github.com/kathy-kx/timing-food-delivery/tree/main/resources/%E5%9B%BE%E7%89%87%E8%B5%84%E6%BA%90)
