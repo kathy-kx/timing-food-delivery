@@ -1,7 +1,7 @@
 # Timing Food Delivery Project
 
 The Timing Food Delivery project is inspired by the "Regi Takeout" tutorial from Bilibili. It is built using **Spring Boot** and **MyBatis Plus** and provides features such as user ordering, restaurant management, and order processing. 
-This project includes comprehensive comments and additional functionalities that were not implemented in the original tutorial to help learners better understand the system.
+This project includes comprehensive comments and expanded functionalities that were not implemented in the original tutorial to help learners better understand the system.
 
 ## 1. Project Overview
 
@@ -60,7 +60,7 @@ The frontend is a mobile application for users. The key features include:
 
 ---
 
-### **1.3 Technology Stack**
+### **1.3 Tech Stack**
 
 - Spring Boot  
 - MyBatis Plus  
@@ -84,12 +84,10 @@ Key highlights:
 
 ### **Version v1.1**  
 
-This version introduces **master-slave replication** and **read-write separation**.
+This version introduces **master-slave replication** and **read-write separation**. This greatly improves the system's query performance.
 
 - The **master database** handles transactional operations (insert, update, delete).
 - The **slave database** handles query operations.
-
-This greatly improves the system's query performance.
 
 ---
 
@@ -99,7 +97,7 @@ This greatly improves the system's query performance.
 
 1. Download the [v1.0 version](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.0) from GitHub.
 
-2. Modify the **`application.yml`** file in **`src/main/resources/`** to configure your database connection.
+2. Edit the **`application.yml`** file in **`src/main/resources/`** to configure your database connection.
 
    Example:
 
@@ -134,7 +132,7 @@ This greatly improves the system's query performance.
      /opt/homebrew/opt/redis/bin/redis-server /opt/homebrew/etc/redis.conf
      ```
 
-     Ensure **`daemonize`** is set to **`yes`** in the Redis config file to run the service in the background.
+     Ensure **`daemonize`** is set to **`yes`** in the Redis config file (redis.conf) to run the service in the background.
 
    **Connect to Redis:**
    ```bash
@@ -152,7 +150,7 @@ This greatly improves the system's query performance.
 
 1. Download the [v1.1 version](https://github.com/kathy-kx/timing-food-delivery/releases/tag/release_v1.1) from GitHub.
 
-2. Prepare **two servers** with MySQL installed and running. Connect them with Navicat. For detailed steps, refer to the notes in section **1.1.2**: [Master-Slave Replication Guide](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/).
+2. Prepare **two servers** with MySQL installed and running. Connect with Navicat. For detailed steps, refer to the notes in section **1.1.2**: [Master-Slave Replication Guide](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/).
 
 3. Configure **master-slave replication**. Detailed steps are in sections **1.1.3** and **1.1.4**: [Read-Write Separation Guide](https://kathy-kx.github.io/2023/11/18/%E7%91%9E%E5%90%89%E5%A4%96%E5%8D%96%E4%BC%98%E5%8C%9602-%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6-Nginx/).
 
@@ -161,24 +159,43 @@ This greatly improves the system's query performance.
    Example:
 
    ```yaml
-   spring:
-     shardingsphere:
-       datasource:
-         names: master,slave
-         master:
-           type: com.alibaba.druid.pool.DruidDataSource
-           driver-class-name: com.mysql.cj.jdbc.Driver
-           url: jdbc:mysql://192.168.50.158:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-           username: ${username}
-           password: ${password}
-         slave:
-           type: com.alibaba.druid.pool.DruidDataSource
-           driver-class-name: com.mysql.cj.jdbc.Driver
-           url: jdbc:mysql://192.168.50.99:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
-           username: ${username}
-           password: ${password}
+spring:
+  shardingsphere:
+    datasource:
+      names:
+        master,slave 
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.50.158:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: ${username}
+        password: ${password}
+      
+      slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.50.99:3306/food_delivery_system?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+        username: ${username}
+        password: ${password}
+    masterslave:
+      load-balance-algorithm-type: round_robin 
+      name: dataSource
+      master-data-source-name: master
+      slave-data-source-names: slave
+    props:
+      sql:
+        show: true 
+  main:
+    allow-bean-definition-overriding: true
    ```
 
+   Also update the file upload path:
+
+   ```yaml
+   timing_food_delivery:
+     path: 
+   ```
+   
 5. Start the **local Redis service** (refer to step 3 in v1.0 deployment).
 
 6. Access the project:
