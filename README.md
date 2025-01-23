@@ -20,7 +20,7 @@ The backend module is a comprehensive management platform designed for restauran
 - Dish Management
   - Add or update dish information
   - Delete, enable, or disable dishes (supports batch operations)
-- Set Meal Management
+- Set Meal(Combo) Management
   - Add or update set meal information
   - Delete, enable, or disable set meals (supports batch operations)
 - Order Management
