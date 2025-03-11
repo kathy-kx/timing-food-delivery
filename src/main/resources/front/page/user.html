@@ -60,7 +60,7 @@
                     <span>共{{order[0].sumNum}} 件商品,实付</span>
                     <span class="price">￥{{order[0].amount}}</span>
                 </div>
-                <div class="btn" v-if="order[0].status === 2">
+                <div class="btn" v-if="order[0].status === 2 || order[0].status === 3 || order[0].status === 4">
                     <div class="btnAgain" @click="addOrderAgain">再来一单</div>
                 </div>
             </div>
