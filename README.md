@@ -200,7 +200,7 @@ spring:
 
 6. Access the project:
 
-   - **Admin Interface:** [http://localhost:8080/backend/page/login.html](http://localhost:8080/backend/page/login.html)  
+   - **Admin Interface:** [http://localhost:8080/backend/page/login/login.html](http://localhost:8080/backend/page/login/login.html)  
    - **User Interface:** [http://localhost:8080/front/page/login.html](http://localhost:8080/front/page/login.html)
 
 ---
